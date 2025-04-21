@@ -3,7 +3,9 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 app.get("/", (req, res) => {
-  res.send("Hello workshop! Server jalan dengan NodeJS dan Express.");
+  res.send(
+    "Hello workshop CI/CD dengan github Actions! Server jalan dengan NodeJS dan Express. Live Deployment!!!",
+  );
 });
 
 app.get("/info", (req, res) => {

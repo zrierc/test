@@ -36,9 +36,7 @@ jobs:
           REPO_DIR="~/nodejs-app"
 
           echo "Setup Directory"
-          if [ -d "$REPO_DIR" ]; then
-            mkdir -p "$REPO_DIR"
-          fi
+          mkdir -p "$REPO_DIR"
 
           if [ -d "$REPO_DIR/.git" ]; then
             cd "$REPO_DIR"

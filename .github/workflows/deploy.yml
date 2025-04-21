@@ -52,5 +52,14 @@ jobs:
             --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
             --zip-file fileb://function.zip --publish
 
+      - name: Test Invoke Lambda Function
+        run: |
+          aws lambda invoke \
+              --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
+              --cli-binary-format raw-in-base64-out \
+              --payload '{ "name": "workshop-ci-cd" }' \
+              response.json && 
+          cat response.json
+
       - name: Clean up
         run: rm function.zip

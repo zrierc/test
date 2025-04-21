@@ -55,7 +55,7 @@ jobs:
 
           # setup
           REPO_URL="https://github.com/zrierc/test.git"
-          BRANCH="nodejs"
+          BRANCH="dev"
           REPO_DIR="$HOME/nodejs-app"
 
           # bikin directory

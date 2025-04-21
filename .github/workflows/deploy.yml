@@ -33,7 +33,7 @@ jobs:
 
           REPO_URL="https://github.com/zrierc/test.git"
           BRANCH="nodejs"
-          REPO_DIR="$HOME/nodejs-app"
+          REPO_DIR="~/nodejs-app"
 
           echo "Setup Directory"
           if [ -d "$REPO_DIR" ]; then
@@ -48,10 +48,10 @@ jobs:
             cd "$REPO_DIR"
           fi
 
-          cd "$REPO_DIR"
+          cd "$REPO_DIR/test"
           npm install
 
-          cd "$REPO_DIR"
+          cd "$REPO_DIR/test"
           git pull origin $BRANCH
           npm install
 

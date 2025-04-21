@@ -33,10 +33,12 @@ jobs:
 
           REPO_URL="https://github.com/zrierc/test.git"
           BRANCH="nodejs"
-          REPO_DIR="~/nodejs-app"
+          REPO_DIR="$HOME/nodejs-app"
 
           echo "Setup Directory"
-          mkdir -p "$REPO_DIR"
+          if [ -d "$REPO_DIR" ]; then
+            mkdir -p "$REPO_DIR"
+          fi
 
           if [ -d "$REPO_DIR/.git" ]; then
             cd "$REPO_DIR"

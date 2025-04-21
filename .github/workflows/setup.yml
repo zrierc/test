@@ -1,0 +1,85 @@
+name: Setup Deployment NodeJS
+
+on:
+  push:
+    branches: [main, dev]
+
+env:
+  STAGE: test
+  AWS_REGION: us-east-1
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    environment: workshop-cicd
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy to EC2
+        env:
+          EC2_USER: ${{ secrets.EC2_USER_SECRET }}
+          EC2_HOST: ${{ secrets.EC2_HOST_SECRET }}
+          KEY: ${{ secrets.EC2_KEY_SECRET }}
+        run: |
+          # 1. SSH key VM
+          # 2. Setup node js & npm & pm2
+          # 3. Clone repo project
+          # 4. Install dependencies (npm install)
+          # 5. (optional) test project (npm run test)
+          # 6. build project (npm run build)
+          # 7. Run aplikasi/project (npm run start/node index.js/pm2 start)
+
+          # 1. Buat fn
+          # 2. configure fn (env)
+          # 3. install deps
+          # 4. zip code
+          # 5. upload ke lambda
+          echo "Setup Node.js"
+          echo "Current env: ${STAGE}"
+          echo "Current Deployment Region: ${AWS_REGION}"
+          echo "$KEY" > github-ec2.pem && chmod 400 github-ec2.pem
+          ssh -o StrictHostKeyChecking=no -i github-ec2.pem ${EC2_USER}@${EC2_HOST} '
+          # install node
+          if ! command -v nvm &> /dev/null; then
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          fi
+          nvm install node
+
+          # install pm2
+          echo "Setup PM2"
+          if ! command -v pm2 &> /dev/null; then
+            npm install -g pm2
+          fi
+
+          # setup
+          REPO_URL="https://github.com/zrierc/test.git"
+          BRANCH="nodejs"
+          REPO_DIR="$HOME/nodejs-app"
+
+          # bikin directory
+          echo "Setup Directory"
+          if [ -d "$REPO_DIR" ]; then
+            mkdir -p "$REPO_DIR"
+          fi
+
+          # clone
+          if [ -d "$REPO_DIR/.git" ]; then
+            cd "$REPO_DIR"
+            git pull origin "$BRANCH"
+          else
+            git clone "$REPO_URL" "$REPO_DIR"
+            cd "$REPO_DIR"
+          fi
+
+          cd "$REPO_DIR/test"
+          npm install
+
+          cd "$REPO_DIR/test"
+          git pull origin $BRANCH
+          npm install
+
+          echo "Starting/restarting application..."
+          pm2 restart server.js || pm2 start server.js
+          '

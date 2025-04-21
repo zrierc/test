@@ -17,7 +17,7 @@ jobs:
           USER: ${{ secrets.EC2_USER }}
         run: |
           echo "Setup Node.js"
-          echo "$PRIVATE_KEY" > github-ec2.pem && chmod 600 github-ec2.pem
+          echo "$PRIVATE_KEY" > github-ec2.pem && chmod 400 github-ec2.pem
           ssh -o StrictHostKeyChecking=no -i github-ec2.pem ${USER}@${HOST} '
           if ! command -v nvm &> /dev/null; then
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash

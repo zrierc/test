@@ -56,4 +56,5 @@ jobs:
           npm install
 
           echo "Starting/restarting application..."
+          pm2 restart server.js || pm2 start server.js
           '
